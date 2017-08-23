@@ -21,5 +21,7 @@ from temp_registry.views import *
 urlpatterns = [
     url(r'^register_temp/', TemperatureRegistration.as_view(),),
     url(r'^register_sensor/', SensorRegistration.as_view(), name="register-sensor"),
-    url(r'^general/', GeneralPage.as_view(), name="general")
+    url(r'^general/', GeneralPage.as_view(), name="general"),
+    url(r'^update_sensor/mac=([^/]+)', SensorUpdate.as_view(), name="update-sensor"),
+    url(r'^delete_sensor/mac=([^/]+)', SensorDelete.as_view(), name="delete-sensor")
 ]

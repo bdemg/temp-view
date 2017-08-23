@@ -1,0 +1,28 @@
+{% extends "common/index.html" %}
+
+{% block title %}Actualizar Sensor{% endblock %}
+
+{% block body %}
+<div class="columns large-offset-2 large-22"><h2>Actualizar Información del Sensor</h2></div>
+<div class="columns large-offset-2 large-21">
+  {% if form %}
+  <form class="sensor-form" action="/update_sensor/mac={{MAC_address}}" method="post">
+    {{ form.as_p }}
+    <input class="button success" type="submit" name="submit" value="Actualizar">
+    <a class="button alert" href="/delete_sensor/mac={{MAC_address}}">Eliminar</a>
+  </form>
+  {% else %}
+  <div class="callout alert">
+    {{error}}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script type="text/javascript">
+    <!--
+    $("#id_MAC_address").prop('readonly', true);
+    //-->
+  </script>
+{% endblock %}

@@ -16,6 +16,6 @@ class TemperatureSensor(models.Model):
 
 
 class TemperatureReadout(models.Model):
-    temp_sensor = models.ForeignKey(TemperatureSensor)
+    temp_sensor = models.ForeignKey(TemperatureSensor, models.CASCADE)
     temperature = models.DecimalField(max_digits=5, decimal_places=3)
     timestamp = models.DateTimeField(auto_now=True)
