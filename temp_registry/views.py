@@ -78,10 +78,11 @@ class SensorUpdate(View):
         form = SensorForm(request.POST or None, instance=instance)
 
         if form.is_valid():
+
             form.save()
-            return HttpResponseRedirect("/general/")
+            return HttpResponseRedirect("/update_sensor/mac=" + MAC_address)
         else:
-            return render(request, self.template_name, {"form": form})
+            return render(request, self.template_name, {"form": form, "MAC_address": MAC_address})
 
 
 class SensorDelete(View):

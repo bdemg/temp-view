@@ -3,7 +3,6 @@ from temp_registry.models import TemperatureSensor
 
 
 class SensorForm(forms.ModelForm):
-
     class Meta():
         model = TemperatureSensor
         fields = '__all__'
@@ -13,4 +12,7 @@ class SensorForm(forms.ModelForm):
             "room": "Salón",
             "upper_temp_limit": "Límite de temperatura superior",
             "lower_temp_limit": "Límite de temperatura inferior",
+        }
+        help_texts = {
+            'MAC_address': 'La dirección debe estar en el formato ee:ee:ee:ee:ee:ee',
         }

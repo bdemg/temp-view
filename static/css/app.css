@@ -18,3 +18,9 @@
 .sensor-form{
   width: 50rem;
 }
+
+.helptext {
+  font-size: .8rem;
+  margin-top: 0rem;
+  padding-top: 0rem;
+}
