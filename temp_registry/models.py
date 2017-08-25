@@ -13,8 +13,12 @@ class TemperatureSensor(models.Model):
     lower_temp_limit = models.DecimalField(max_digits=5, decimal_places=3)
 
     @property
-    def last_known_temprerature(self):
-        return TemperatureReadout.objects.filter(temp_sensor=self).order_by('-timestamp').latest()
+    def last_known_temperature(self):
+        readouts = TemperatureReadout.objects.filter(temp_sensor=self)
+        if readouts.exists():
+            return readouts.latest('timestamp').temperature
+        else:
+            return "N/A"
 
 
 class TemperatureReadout(models.Model):
