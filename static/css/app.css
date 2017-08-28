@@ -3,8 +3,15 @@
 }
 
 .content{
-  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
-  background-color: #ffffff;
+  padding: 1rem 0.5rem 0.2rem 1rem;
+}
+
+.callout-list{
+  margin-left: 1rem;
+}
+
+.callout.restrict{
+  width: 25rem;
 }
 
 .center-content{

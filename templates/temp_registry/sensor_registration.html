@@ -3,11 +3,13 @@
 {% block title %}Registrar Nuevo Sensor{% endblock %}
 
 {% block body %}
-<div class="columns large-offset-2 large-22"><h2>Nuevo Sensor</h2></div>
-<div class="columns large-offset-2 large-21">
-  <form class="sensor-form" action="{% url "register-sensor" %}" method="post">
-    {{ form.as_p }}
-    <input class="button success" type="submit" name="submit" value="Aceptar">
-  </form>
+<div class="row">
+  <div class="columns large-offset-2 large-22"><h2>Nuevo Sensor</h2></div>
+  <div class="columns large-offset-2 large-21">
+    <form class="sensor-form" action="{% url "register-sensor" %}" method="post">
+      {{ form.as_p }}
+      <input class="button success" type="submit" name="submit" value="Aceptar">
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -3,12 +3,19 @@
 {% block title %}Vista General{% endblock %}
 
 {% block body %}
-<div ng-app="TempView" ng-controller="GeneralController">
-  <ul>
-      <li ng-repeat="sensor in temperatureSensors">
-        <a href="/update_sensor/mac=[[sensor.pk]]">[[sensor.pk]]</a> Temp:<span>[[sensor.fields.last_known_temperature]]</span>°
-      </li>
-  </ul>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<div ng-app="TempView" ng-controller="GeneralController" class="content">
+<div layout="row" layout-wrap layout-align="space-around center">
+  <div ng-repeat="(building, sensors) in temperatureSensors | groupBy: 'fields.building'">
+    <div flex="33" class="callout primary restrict">
+      <h3>Edificio [[building]]</h3>
+      <ul class="callout-list">
+        <li ng-repeat="sensor in sensors">
+          <a href="/update_sensor/mac=[[sensor.pk]]">[[sensor.pk]]</a> Salón <span>[[sensor.fields.room]]</span> Temp:<span>[[sensor.fields.last_known_temperature]]</span>°
+        </li>
+      </ul>
+      <h5 style="text-align: right">Promedio: [[tempAverage(sensors)]]°</h5>
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}
