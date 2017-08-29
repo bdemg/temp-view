@@ -30,6 +30,11 @@ function GeneralController($scope, $http) {
     $http.get("/temperature_sensors/").then(function (response){
 
       $scope.temperatureSensors = response.data;
+
+      $scope.temperatureSensors.sort(function(a, b){
+        return a.fields.building.localeCompare(b.fields.building);
+      });
+      
       setTimeout(refreshSensors, SENSOR_REFRESH_TIMEOUT);
     }, function(response){
 

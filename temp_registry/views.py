@@ -55,7 +55,7 @@ class SensorUpdate(View):
         if form.is_valid():
 
             form.save()
-            return HttpResponseRedirect("/update_sensor/mac=" + MAC_address)
+            return HttpResponseRedirect("/general/")
         else:
             return render(request, self.template_name, {"form": form, "MAC_address": MAC_address})
 
