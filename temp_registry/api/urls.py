@@ -20,5 +20,7 @@ from temp_registry.api.views import *
 
 urlpatterns = [
     url(r'^register_temp/', TemperatureRegistration.as_view()),
-    url(r'^temperature_sensors/', TemperatureSensorsGetter.as_view())
+    url(r'^temperature_sensors/', TemperatureSensorsGetter.as_view()),
+    url(r'^temperature_readouts/mac=([^/]+)', TemperatureReportGetter.as_view()),
+    url(r'^delete_sensor/mac=([^/]+)', SensorDelete.as_view(), name="delete-sensor"),
 ]

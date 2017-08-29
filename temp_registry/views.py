@@ -60,13 +60,6 @@ class SensorUpdate(View):
             return render(request, self.template_name, {"form": form, "MAC_address": MAC_address})
 
 
-class SensorDelete(View):
-
-    def get(self, request, MAC_address):
-        sensor = TemperatureSensor.objects.get(MAC_address=MAC_address)
-        sensor.delete()
-        return HttpResponseRedirect("/general/")
-
 class GeneralPage(View):
     template_name = "temp_registry/general_view.html"
 

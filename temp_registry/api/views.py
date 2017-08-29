@@ -1,6 +1,8 @@
 import json
 
 from decimal import Decimal
+
+from django.core import serializers
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
@@ -40,3 +42,25 @@ class TemperatureSensorsGetter(View):
         serialized_sensors = ExtJsonSerializer().serialize(
             queryset=TemperatureSensor.objects.all(), props=['last_known_temperature'])
         return HttpResponse(serialized_sensors, content_type="application/json")
+
+
+class TemperatureReportGetter(View):
+
+    def get(self, request, MAC_address):
+
+        if TemperatureSensor.objects.filter(MAC_address=MAC_address).exists():
+            readouts = TemperatureReadout.objects.filter(
+                temp_sensor=TemperatureSensor.objects.get(MAC_address=MAC_address))
+
+            readouts.order_by("-timestamp")
+            serialized_readouts = serializers.serialize("json", readouts)
+
+            return HttpResponse(serialized_readouts, content_type="application/json")
+
+
+class SensorDelete(View):
+
+    def get(self, request, MAC_address):
+        sensor = TemperatureSensor.objects.get(MAC_address=MAC_address)
+        sensor.delete()
+        return HttpResponseRedirect("/general/")
