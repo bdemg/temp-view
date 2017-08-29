@@ -4,16 +4,16 @@
 
 {% block body %}
 <div ng-app="TempView" ng-controller="GeneralController" class="content">
-<div layout="row" layout-wrap layout-align="space-around center">
+<div layout="row" layout-wrap layout-align="space-around start">
   <div ng-repeat="(building, sensors) in temperatureSensors | groupBy: 'fields.building'">
     <div flex="33" class="callout primary restrict">
       <h3>Edificio [[building]]</h3>
       <ul class="callout-list">
         <li ng-repeat="sensor in sensors">
-          <a href="/update_sensor/mac=[[sensor.pk]]">[[sensor.pk]]</a> Salón <span>[[sensor.fields.room]]</span> Temp:<span>[[sensor.fields.last_known_temperature]]</span>°
+          <a href="/update_sensor/mac=[[sensor.pk]]">Salón <span>[[sensor.fields.room]]</span></a> Temp:<span>[[sensor.fields.last_known_temperature]]</span>°
         </li>
       </ul>
-      <h5 style="text-align: right">Promedio: [[tempAverage(sensors)]]°</h5>
+      <h5 style="text-align: right">Promedio: [[tempAverage(sensors) | number]]°</h5>
     </div>
   </div>
 </div>
