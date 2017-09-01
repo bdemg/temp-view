@@ -25,3 +25,19 @@ class TemperatureReadout(models.Model):
     temp_sensor = models.ForeignKey(TemperatureSensor, models.CASCADE)
     temperature = models.DecimalField(max_digits=5, decimal_places=3)
     timestamp = models.DateTimeField(auto_now=True)
+
+
+class Building(models.Model):
+    name = models.CharField(max_length=50)
+
+    @property
+    def rooms(self):
+        return Room.objects.filter(building=self)
+
+    def __str__(self):
+        return self.name
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=50)
+    building = models.ForeignKey(Building)

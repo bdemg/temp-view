@@ -1,5 +1,5 @@
 from django import forms
-from temp_registry.models import TemperatureSensor
+from temp_registry.models import TemperatureSensor, Building, Room
 
 
 class SensorForm(forms.ModelForm):
@@ -15,4 +15,23 @@ class SensorForm(forms.ModelForm):
         }
         help_texts = {
             'MAC_address': 'La dirección debe estar en el formato ee:ee:ee:ee:ee:ee',
+        }
+
+
+class BuildingForm(forms.ModelForm):
+    class Meta():
+        model = Building
+        fields = '__all__'
+        labels = {
+            "name": "Nombre del edificio",
+        }
+
+
+class RoomForm(forms.ModelForm):
+    class Meta():
+        model = Room
+        fields = "__all__"
+        labels = {
+            "name": "Nombre del salón",
+            "building": "Edificio"
         }

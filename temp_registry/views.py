@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from temp_registry.forms import SensorForm
+from temp_registry.forms import SensorForm, RoomForm, BuildingForm
 from temp_registry.models import TemperatureSensor, TemperatureReadout
 
 
@@ -65,4 +65,12 @@ class GeneralPage(View):
 
     def get(self, request):
         context = {}
+        return render(request, self.template_name, context)
+
+
+class RoomAndBuildingRegistrationPage(View):
+    template_name = "temp_registry/building_and_room.html"
+
+    def get(self, request):
+        context = {"room_form": RoomForm(), "building_form": BuildingForm()}
         return render(request, self.template_name, context)
