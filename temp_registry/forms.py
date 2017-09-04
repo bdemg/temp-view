@@ -5,7 +5,7 @@ from temp_registry.models import TemperatureSensor, Building, Room
 class SensorForm(forms.ModelForm):
     class Meta():
         model = TemperatureSensor
-        fields = '__all__'
+        fields = ['MAC_address', 'upper_temp_limit', 'lower_temp_limit', 'building']
         labels = {
             "MAC_address": "Dirección MAC",
             "building": "Edificio",

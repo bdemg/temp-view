@@ -10,7 +10,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from temp_registry.forms import SensorForm, RoomForm, BuildingForm
-from temp_registry.models import TemperatureSensor, TemperatureReadout
+from temp_registry.models import TemperatureSensor, TemperatureReadout, Room
 
 
 class SensorRegistration(View):
@@ -27,7 +27,14 @@ class SensorRegistration(View):
         if form.is_valid() and not TemperatureSensor.objects.filter(
                 MAC_address=form.cleaned_data["MAC_address"]).exists():
 
-            form.save(commit=True)
+            TemperatureSensor(
+                MAC_address=form.cleaned_data["MAC_address"],
+                building=form.cleaned_data["building"],
+                room=Room.objects.get(id=int(request.POST["room"])),
+                upper_temp_limit=form.cleaned_data["upper_temp_limit"],
+                lower_temp_limit=form.cleaned_data["lower_temp_limit"]
+            ).save()
+
             return HttpResponseRedirect("/general/")
         else:
 

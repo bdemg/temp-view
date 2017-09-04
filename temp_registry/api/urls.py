@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^register_building/', BuildingRegister.as_view()),
     url(r'^register_room/', RoomRegister.as_view()),
     url(r'^delete_sensor/mac=([^/]+)', SensorDelete.as_view(), name="delete-sensor"),
+    url(r'^rooms/building=([^/]+)', BuildingRoomsGetter.as_view()),
 ]

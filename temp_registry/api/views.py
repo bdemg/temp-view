@@ -101,3 +101,16 @@ class RoomRegister(View):
 
         else:
             return HttpResponseRedirect("/room_building_registration/")
+
+
+class BuildingRoomsGetter(View):
+
+    def get(self, request, building):
+
+        if Building.objects.filter(id=building).exists():
+
+            building_rooms = Room.objects.filter(building=Building.objects.get(id=building))
+            return HttpResponse(serializers.serialize("json", building_rooms))
+
+        else:
+            return HttpResponse("[]", content_type="application/json")
