@@ -25,7 +25,7 @@ class SensorRegistration(View):
         form = SensorForm(request.POST)
 
         if form.is_valid() and not TemperatureSensor.objects.filter(
-                MAC_address=form.base_fields["MAC_address"]).exists():
+                MAC_address=form.cleaned_data["MAC_address"]).exists():
 
             form.save(commit=True)
             return HttpResponseRedirect("/general/")

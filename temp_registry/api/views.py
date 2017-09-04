@@ -25,12 +25,12 @@ class TemperatureRegistration(View):
         if TemperatureSensor.objects.filter(MAC_address=sensor_data["sensor_id"]).exists():
 
             temperature = Decimal(sensor_data["temperature"])
+            humidity = Decimal(sensor_data["humidity"])
             TemperatureReadout(
                 temp_sensor=TemperatureSensor.objects.get(MAC_address=sensor_data["sensor_id"]),
-                temperature=temperature
+                temperature=temperature,
+                humidity=humidity
             ).save()
-            print(temperature)
-            print(sensor_data["sensor_id"])
 
             return JsonResponse(data=sensor_data, status=200)
         else:
@@ -41,7 +41,12 @@ class TemperatureSensorsGetter(View):
 
     def get(self, request):
         serialized_sensors = ExtJsonSerializer().serialize(
-            queryset=TemperatureSensor.objects.all(), props=['last_known_temperature'])
+            queryset=TemperatureSensor.objects.all(),
+            props=[
+                'last_known_temperature',
+                'building_name',
+                'room_name'
+            ])
         return HttpResponse(serialized_sensors, content_type="application/json")
 
 
@@ -72,7 +77,7 @@ class BuildingRegister(View):
     def post(self, request):
         form = BuildingForm(request.POST)
 
-        if form.is_valid() and not Building.objects.filter(name=form.base_fields["name"]).exists():
+        if form.is_valid() and not Building.objects.filter(name=form.cleaned_data["name"]).exists():
 
             form.save(commit=True)
             return HttpResponseRedirect("/room_building_registration/")
@@ -86,8 +91,10 @@ class RoomRegister(View):
     def post(self, request):
         form = RoomForm(request.POST)
 
-        if form.is_valid() and not Room.objects.filter(name=form.base_fields["name"],
-                                                       building=form.base_fields["building"]).exists():
+        #b = form.cleaned_data["building"]
+
+        if form.is_valid() and not Room.objects.filter(name=form.cleaned_data["name"],
+                                                       building=form.cleaned_data["building"]).exists():
 
             form.save(commit=True)
             return HttpResponseRedirect("/room_building_registration/")
