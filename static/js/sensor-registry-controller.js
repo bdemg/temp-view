@@ -5,7 +5,7 @@ function SensorRegistryController($scope, $http) {
   $scope.rooms = [];
 
   $("#id_building").change(function(){
-
+    $("#id_room").val("");
     getRoomsForSelectedBuilding($("#id_building").val());
   });
 
