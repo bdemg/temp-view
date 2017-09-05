@@ -81,3 +81,11 @@ class RoomAndBuildingRegistrationPage(View):
     def get(self, request):
         context = {"room_form": RoomForm(), "building_form": BuildingForm()}
         return render(request, self.template_name, context)
+
+
+class ReportsPage(View):
+    template_name = "temp_registry/reports.html"
+
+    def get(self, request):
+        context = {"sensors": TemperatureSensor.objects.all()}
+        return render(request, self.template_name, context)

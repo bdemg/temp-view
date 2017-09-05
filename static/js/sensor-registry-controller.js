@@ -4,6 +4,9 @@ function SensorRegistryController($scope, $http) {
 
   $scope.rooms = [];
 
+  $.mask.definitions['h'] = "[a-f0-9]";
+  $("#id_MAC_address").mask("hh:hh:hh:hh:hh:hh");
+
   $("#id_building").change(function(){
     $("#id_room").val("");
     getRoomsForSelectedBuilding($("#id_building").val());

@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^general/$', GeneralPage.as_view(), name="general"),
     url(r'^update_sensor/mac=([^/]+)', SensorUpdate.as_view(), name="update-sensor"),
     url(r'^room_building_registration/$', RoomAndBuildingRegistrationPage.as_view(), name="register-room-building"),
+    url(r'^reports/$', ReportsPage.as_view(), name="sensor-reports"),
     url(r'^', include("temp_registry.api.urls"))
 ]

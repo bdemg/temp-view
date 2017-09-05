@@ -1,0 +1,31 @@
+{% extends "common/index.html" %}
+
+{% block title %}Reporte de Temperaturas{% endblock %}
+
+{% block body %}
+<div class="row" ng-app="TempView">
+  <div class="columns large-offset-2 large-22"><h2>Reportes</h2></div>
+  <div class="columns large-offset-2 large-22" layout="row" layout-align="space-around start">
+    <div flex="30">
+      <label for="id_sensor">Sensor:</label>
+      <select name="sensor" id="id_sensor">
+        <option value selected>-------</option>
+        {% for sensor in sensors %}
+        <option value="{{sensor.id}}">Edificio:{{sensor.building.name}} - Salón:{{sensor.room.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div flex="30">
+      <label for="id_start_date">Fecha de inicio:</label>
+      <input type="date" name="start_date" id="id_start_date">
+    </div>
+    <div flex="30">
+      <label for="id_end_date">Fecha final:</label>
+      <input type="date" name="end_date" id="id_end_date">
+    </div>
+    <div flex="9">
+      <button type="button" name="button" class="button success" style="margin-top:1.4rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
