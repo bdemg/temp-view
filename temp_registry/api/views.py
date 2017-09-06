@@ -114,3 +114,24 @@ class BuildingRoomsGetter(View):
 
         else:
             return HttpResponse("[]", content_type="application/json")
+
+
+class BuildingEraser(View):
+
+    def post(self, request):
+        building_id = request.POST["building"]
+
+        if Building.objects.filter(id=building_id).exists():
+            Building.objects.get(id=building_id).delete()
+
+            return HttpResponseRedirect("/room_building_delete/")
+
+class RoomEraser(View):
+
+    def post(self, request):
+        room_id = request.POST["room"]
+
+        if Room.objects.filter(id=room_id).exists():
+            Room.objects.get(id=room_id).delete()
+
+            return HttpResponseRedirect("/room_building_delete/")

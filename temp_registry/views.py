@@ -10,7 +10,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from temp_registry.forms import SensorForm, RoomForm, BuildingForm
-from temp_registry.models import TemperatureSensor, TemperatureReadout, Room
+from temp_registry.models import TemperatureSensor, TemperatureReadout, Room, Building
 
 
 class SensorRegistration(View):
@@ -76,10 +76,18 @@ class GeneralPage(View):
 
 
 class RoomAndBuildingRegistrationPage(View):
-    template_name = "temp_registry/building_and_room.html"
+    template_name = "temp_registry/building_and_room_registry.html"
 
     def get(self, request):
         context = {"room_form": RoomForm(), "building_form": BuildingForm()}
+        return render(request, self.template_name, context)
+
+
+class RoomAndBuildingDeletePage(View):
+    template_name = "temp_registry/building_and_room_delete.html"
+
+    def get(self, request):
+        context = {"rooms": Room.objects.all(), "buildings": Building.objects.all()}
         return render(request, self.template_name, context)
 
 

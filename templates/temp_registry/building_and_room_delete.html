@@ -1,0 +1,40 @@
+{% extends "common/index.html" %}
+
+{% block title %}Eliminar Salon/Edificio{% endblock %}
+
+{% block body %}
+<div ng-app="TempView" class="content">
+<div layout="row" layout-wrap layout-align="space-around start">
+
+  <div flex="45">
+    <h2>Eliminar Edificio</h2>
+    <form class="" action="/delete_building/" method="post">
+      <label for="id_building">Nombre del edificio:</label>
+      <p><select name="building" id="id_building">
+        <option value selected>---------</option>
+        {% for building in buildings %}
+          <option value="{{building.id}}">{{building.name}}</option>
+        {% endfor %}
+      </select></p>
+      <span class="helptext">Eliminar un edificio eliminará todos los salones asociados.</span><br>
+      <input class="button alert" type="submit" name="Eliminar" value="Eliminar">
+    </form>
+  </div>
+
+  <div flex="45">
+    <h2>Eliminar Salón</h2>
+    <form class="" action="/delete_room/" method="post">
+      <label for="id_building">Nombre del salón:</label>
+      <p><select name="room" id="id_room">
+        <option value selected>---------</option>
+        {% for room in rooms %}
+          <option value="{{room.id}}">{{room.name}}</option>
+        {% endfor %}
+      </select></p>
+      <input class="button alert" type="submit" name="Eliminar" value="Eliminar">
+    </form>
+  </div>
+
+</div>
+</div>
+{% endblock %}

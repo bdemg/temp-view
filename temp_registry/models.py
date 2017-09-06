@@ -7,8 +7,8 @@ from django.db import models
 class TemperatureSensor(models.Model):
     MAC_address = models.CharField(primary_key=True, max_length=17, validators=[
         RegexValidator(regex=r'^[a-f0-9:]{17}$', message="La dirección mac no tiene un formato válido")])
-    building = models.ForeignKey("Building")
-    room = models.ForeignKey("Room")
+    building = models.ForeignKey("Building", on_delete=models.SET_NULL, null=True)
+    room = models.ForeignKey("Room", on_delete=models.SET_NULL, null=True)
     upper_temp_limit = models.DecimalField(max_digits=5, decimal_places=3)
     lower_temp_limit = models.DecimalField(max_digits=5, decimal_places=3)
 
@@ -22,11 +22,17 @@ class TemperatureSensor(models.Model):
 
     @property
     def building_name(self):
-        return self.building.name
+        if self.building:
+            return self.building.name
+        else:
+            return None
 
     @property
     def room_name(self):
-        return self.room.name
+        if self.room:
+            return self.room.name
+        else:
+            return None
 
 
 class TemperatureReadout(models.Model):
@@ -49,7 +55,7 @@ class Building(models.Model):
 
 class Room(models.Model):
     name = models.CharField(max_length=50)
-    building = models.ForeignKey(Building)
+    building = models.ForeignKey(Building, models.CASCADE)
 
     def __str__(self):
         return self.name
