@@ -44,11 +44,22 @@ class SensorRegistration(View):
 class SensorUpdate(View):
     template_name = "temp_registry/sensor_update.html"
 
+    def get_id_or_empty_string(self, value):
+        if value:
+            return value.id
+        else:
+            ""
+
     def get(self, request, MAC_address):
-        if TemperatureSensor.objects.filter(MAC_address=MAC_address).exists:
-            context = {"form": SensorForm(
-                instance=TemperatureSensor.objects.get(MAC_address=MAC_address)
-            ), "MAC_address": MAC_address}
+
+        if TemperatureSensor.objects.filter(MAC_address=MAC_address).exists():
+
+            sensor = TemperatureSensor.objects.get(MAC_address=MAC_address)
+            context = {
+                "form": SensorForm(instance=sensor),
+                "MAC_address": MAC_address,
+                "selected_room": self.get_id_or_empty_string(sensor.room)
+            }
         else:
             context = {"error": "No se encuentra el sensor especificado"}
 
@@ -61,7 +72,13 @@ class SensorUpdate(View):
 
         if form.is_valid():
 
-            form.save()
+            TemperatureSensor(
+                MAC_address=form.cleaned_data["MAC_address"],
+                building=form.cleaned_data["building"],
+                room=Room.objects.get(id=int(request.POST["room"])),
+                upper_temp_limit=form.cleaned_data["upper_temp_limit"],
+                lower_temp_limit=form.cleaned_data["lower_temp_limit"]
+            ).save()
             return HttpResponseRedirect("/general/")
         else:
             return render(request, self.template_name, {"form": form, "MAC_address": MAC_address})

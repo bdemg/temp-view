@@ -6,8 +6,13 @@ function SensorUpdateController($scope, $http) {
 
   $.mask.definitions['h'] = "[a-f0-9]";
   $("#id_MAC_address").mask("hh:hh:hh:hh:hh:hh");
-  getRoomsForSelectedBuilding($("#id_building").val());
-  //Hacerle para que lea el valor seleccionado de un hidden
+
+  var selected_building = $("#id_building").val();
+  $http.get("/rooms/building=" + selected_building).then(function (response){
+    $scope.rooms = response.data;
+    setTimeout(function () {$("#id_room").val($("#id_selected_room").val());}, 10);
+  });
+
 
   $("#id_building").change(function(){
     $("#id_room").val("");

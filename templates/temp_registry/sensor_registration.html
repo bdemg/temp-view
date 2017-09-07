@@ -3,14 +3,14 @@
 {% block title %}Registrar Nuevo Sensor{% endblock %}
 
 {% block body %}
-<div class="row" ng-app="TempView" ng-controller="SensorUpdateController">
+<div class="row" ng-app="TempView" ng-controller="SensorRegistryController">
   <div class="columns large-offset-2 large-22"><h2>Nuevo Sensor</h2></div>
   <div class="columns large-offset-2 large-21">
     <form class="sensor-form" action="{% url "register-sensor" %}" method="post">
       {{ form.as_p }}
       <p>
         <label for="id_room">Salón:</label>
-        <select name="room" id="id_room" required="" ng-change="getRoomsForSelectedBuilding()" ng-model="building">
+        <select name="room" id="id_room" required="">
           <option value selected>---------</option>
           <option ng-repeat="room in rooms" value="[[room.pk]]">[[room.fields.name]]</option>
         </select>

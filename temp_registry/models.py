@@ -25,14 +25,14 @@ class TemperatureSensor(models.Model):
         if self.building:
             return self.building.name
         else:
-            return None
+            return "N/A"
 
     @property
     def room_name(self):
         if self.room:
             return self.room.name
         else:
-            return None
+            return "N/A"
 
 
 class TemperatureReadout(models.Model):
