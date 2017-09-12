@@ -10,7 +10,7 @@
       <h3>Edificio [[building]]</h3>
       <ul class="callout-list">
         <li ng-repeat="sensor in sensors">
-          <a href="/update_sensor/mac=[[sensor.pk]]">Salón <span>[[sensor.fields.room_name]]</span></a> Temp:<span>[[sensor.fields.last_known_temperature]]</span>°
+          <a href="/update_sensor/mac=[[sensor.pk]]">Salón <span>[[sensor.fields.room_name]]</span></a> Temp:<span>[[sensor.fields.last_known_temperature | number]]</span>°
         </li>
       </ul>
       <h5 style="text-align: right">Promedio: [[tempAverage(sensors) | number]]°</h5>
