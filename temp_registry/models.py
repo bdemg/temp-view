@@ -63,3 +63,8 @@ class Room(models.Model):
 
 class AlertEmails(models.Model):
     email = models.EmailField(max_length=254, unique=True)
+
+
+class AlertTimeout(models.Model):
+    temp_sensor = models.ForeignKey(TemperatureSensor)
+    timeout = models.DateTimeField()

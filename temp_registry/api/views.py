@@ -1,4 +1,6 @@
 import json
+import _thread
+from datetime import datetime
 
 from decimal import Decimal
 
@@ -7,15 +9,14 @@ from django.http.response import JsonResponse, HttpResponse, HttpResponseRedirec
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 
+from temp_registry.alerts import send_overheat_alert, send_freezing_alert
 from temp_registry.forms import BuildingForm, RoomForm
-from temp_registry.models import TemperatureSensor, TemperatureReadout, Building, Room
+from temp_registry.models import TemperatureSensor, TemperatureReadout, Building, Room, AlertTimeout
 from temp_registry.serializers import ExtJsonSerializer
 
 
 class TemperatureRegistration(View):
-
-    def get(self, request):
-        return JsonResponse(data={}, status=200)
+    timeout_duration = 5
 
     @csrf_exempt
     def post(self, request):
@@ -24,17 +25,45 @@ class TemperatureRegistration(View):
 
         if TemperatureSensor.objects.filter(MAC_address=sensor_data["sensor_id"]).exists():
 
+            temp_sensor = TemperatureSensor.objects.get(MAC_address=sensor_data["sensor_id"])
             temperature = Decimal(sensor_data["temperature"])
             humidity = Decimal(sensor_data["humidity"])
             TemperatureReadout(
-                temp_sensor=TemperatureSensor.objects.get(MAC_address=sensor_data["sensor_id"]),
+                temp_sensor=temp_sensor,
                 temperature=temperature,
                 humidity=humidity
             ).save()
 
+            self.manage_alert_sending(temperature, temp_sensor)
+
             return JsonResponse(data=sensor_data, status=200)
         else:
             return JsonResponse(data=sensor_data, status=404)
+
+    def manage_alert_sending(self, temperature, temp_sensor):
+
+        if not AlertTimeout.objects.filter(temp_sensor=temp_sensor).exists():
+            self.evaluate_temperture(temperature, temp_sensor)
+
+        elif datetime.today() > AlertTimeout.objects.get(temp_sensor=temp_sensor).timeout:
+            AlertTimeout.objects.get(temp_sensor=temp_sensor).delete()
+            self.evaluate_temperture(temperature, temp_sensor)
+
+    def evaluate_temperture(self, temperature, temp_sensor):
+
+        if temperature > temp_sensor.upper_temp_limit:
+            _thread.start_new_thread(send_overheat_alert, (temp_sensor, temperature))
+            AlertTimeout(
+                temp_sensor=temp_sensor,
+                timeout= (datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
+            ).save()
+
+        elif temperature < temp_sensor.lower_temp_limit:
+            _thread.start_new_thread(send_freezing_alert, (temp_sensor, temperature))
+            AlertTimeout(
+                temp_sensor=temp_sensor,
+                timeout=(datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
+            ).save()
 
 
 class TemperatureSensorsGetter(View):
