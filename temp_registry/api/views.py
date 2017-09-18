@@ -1,6 +1,6 @@
 import json
 import _thread
-from datetime import datetime
+import datetime
 
 from decimal import Decimal
 
@@ -45,25 +45,25 @@ class TemperatureRegistration(View):
         if not AlertTimeout.objects.filter(temp_sensor=temp_sensor).exists():
             self.evaluate_temperture(temperature, temp_sensor)
 
-        elif datetime.today() > AlertTimeout.objects.get(temp_sensor=temp_sensor).timeout:
+        elif datetime.datetime.today() > AlertTimeout.objects.get(temp_sensor=temp_sensor).timeout:
             AlertTimeout.objects.get(temp_sensor=temp_sensor).delete()
             self.evaluate_temperture(temperature, temp_sensor)
 
     def evaluate_temperture(self, temperature, temp_sensor):
 
         if temperature > temp_sensor.upper_temp_limit:
-            _thread.start_new_thread(send_overheat_alert, (temp_sensor, temperature))
             AlertTimeout(
                 temp_sensor=temp_sensor,
-                timeout= (datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
+                timeout= (datetime.datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
             ).save()
+            _thread.start_new_thread(send_overheat_alert, (temp_sensor, temperature))
 
         elif temperature < temp_sensor.lower_temp_limit:
-            _thread.start_new_thread(send_freezing_alert, (temp_sensor, temperature))
             AlertTimeout(
                 temp_sensor=temp_sensor,
-                timeout=(datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
+                timeout=(datetime.datetime.today() + datetime.timedelta(minutes=self.timeout_duration))
             ).save()
+            _thread.start_new_thread(send_freezing_alert, (temp_sensor, temperature))
 
 
 class TemperatureSensorsGetter(View):
