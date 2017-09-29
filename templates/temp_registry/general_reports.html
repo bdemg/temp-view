@@ -1,0 +1,39 @@
+{% extends "common/index.html" %}
+
+{% block title %}Reporte de Temperaturas{% endblock %}
+
+{% block body %}
+<div class="row" ng-app="TempView" ng-controller="GeneralReportsController">
+  <div class="columns large-22"><h2>Reportes</h2></div>
+  <div class="columns large-22" layout="row" layout-align="space-around start">
+    <div flex="30">
+      <label for="id_sensor">Sensor:</label>
+      <select name="sensor" id="id_sensor" ng-model="sensor">
+        <option value selected>-------</option>
+        {% for sensor in sensors %}
+        <option value="{{sensor.MAC_address}}">Edificio:{{sensor.building.name}} - Salón:{{sensor.room.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div flex="30">
+      <label for="id_range" >Rango de tiempo:</label>
+      <select class="" ng-model="range" name="range" id="id_range">
+        <option value selected>-------</option>
+        <option value="day">Dia</option>
+        <option value="week">Semana</option>
+        <option value="month">Mes</option>
+        <option value="year">Año</option>
+      </select>
+    </div>
+    <div flex="30">
+      <label for="id_start_date" >Fecha de inicio:</label>
+      <input type="date" name="start_date" id="id_start_date" ng-model="startDate">
+    </div>
+    <div flex="9">
+      <input ng-click="getTemperatureReadouts()" type="button" name="button" class="button success" style="margin-top:1.4rem" value="Aceptar">
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}

@@ -8,13 +8,6 @@
     <link rel="stylesheet" href="{% static "css/app.css" %}">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
     <link rel="shortcut icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
-  </head>
-  <body>
-    {% include "common/navbar.html" %}
-
-      {% block body %}
-      {% endblock %}
-
     <!-- Angular Material requires Angular.js Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
@@ -23,6 +16,13 @@
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.min.js"></script>
+  </head>
+  <body>
+    {% include "common/navbar.html" %}
+
+      {% block body %}
+      {% endblock %}
+
     <script src="{% static "js/vendor/jquery.js" %}"></script>
     <script src="{% static "js/vendor/what-input.js" %}"></script>
     <script src="{% static "js/vendor/foundation.js" %}"></script>
@@ -31,7 +31,7 @@
     <!-- Sección de controladores -->
     <script src="{% static "js/general-controller.js" %}"></script>
     <script src="{% static "js/sensor-registry-controller.js" %}"></script>
-    <script src="{% static "js/reports-controller.js" %}"></script>
+    <script src="{% static "js/general-reports-controller.js" %}"></script>
     <script src="{% static "js/sensor-update-controller.js" %}"></script>
     {% block extra_scripts %} {% endblock %}
   </body>

@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 
 from temp_registry.alerts import send_overheat_alert, send_freezing_alert
+from temp_registry.api.reports import dailyReport, weeklyReport, monthlyReport, yearlyReport
 from temp_registry.forms import BuildingForm, RoomForm
 from temp_registry.models import TemperatureSensor, TemperatureReadout, Building, Room, AlertTimeout
 from temp_registry.serializers import ExtJsonSerializer
@@ -164,3 +165,25 @@ class RoomEraser(View):
             Room.objects.get(id=room_id).delete()
 
             return HttpResponseRedirect("/room_building_delete/")
+
+
+class GeneralTempReporter(View):
+
+    def get(self, request, mac, startDate, range):
+
+        report = {}
+        date = datetime.datetime.strptime(startDate, "%Y-%m-%d")
+
+        if range == "day":
+            report = dailyReport(date, mac)
+
+        elif range == "week":
+            report = weeklyReport(date, mac)
+
+        elif range == "month":
+            report = monthlyReport(date, mac)
+
+        elif range == "year":
+            report = yearlyReport(date, mac)
+
+        return JsonResponse(report)

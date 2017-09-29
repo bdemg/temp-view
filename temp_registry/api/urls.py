@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^rooms/building=([^/]+)', BuildingRoomsGetter.as_view()),
     url(r'^delete_building/', BuildingEraser.as_view()),
     url(r'^delete_room/', RoomEraser.as_view()),
+    url(r'^general_reports/mac=([^/]+)/startDate=([^/]+)/range=([^/]+)', GeneralTempReporter.as_view())
 ]

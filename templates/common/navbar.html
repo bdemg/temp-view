@@ -3,13 +3,19 @@
     <ul class="dropdown menu" data-dropdown-menu>
       <li class="menu-text navbar-title">TempView</li>
       <li><a href="{% url "general" %}">Vista General</a></li>
-      <li><a href="{% url "sensor-reports" %}">Reportes</a></li>
+
       <li><a href="{% url "register-sensor" %}">Registrar Sensor</a></li>
       <li>
         <a href="#">Edificios y salones</a>
         <ul class="menu vertical">
           <li><a href="{% url "register-room-building" %}">Registrar Edificio/Salón</a></li>
           <li><a href="{% url "delete-room-building" %}">Eliminar Edificio/Salon</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Reportes</a>
+        <ul class="menu vertical">
+          <li><a href="{% url "sensor-reports" %}">Reportes generales</a></li>
         </ul>
       </li>
     </ul>

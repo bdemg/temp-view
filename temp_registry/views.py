@@ -109,7 +109,7 @@ class RoomAndBuildingDeletePage(View):
 
 
 class ReportsPage(View):
-    template_name = "temp_registry/reports.html"
+    template_name = "temp_registry/general_reports.html"
 
     def get(self, request):
         context = {"sensors": TemperatureSensor.objects.all()}
