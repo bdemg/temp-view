@@ -169,10 +169,10 @@ class RoomEraser(View):
 
 class GeneralTempReporter(View):
 
-    def get(self, request, mac, startDate, range):
+    def get(self, request, mac, start_date, range):
 
         report = {}
-        date = datetime.datetime.strptime(startDate, "%Y-%m-%d")
+        date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
 
         if range == "day":
             report = dailyReport(date, mac)
