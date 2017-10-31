@@ -84,9 +84,10 @@ def monthlyReport(start_date, mac):
                                                  )
     start_day = start_date
     end_day = start_date + relativedelta(months=+1)
+    day_delta = (end_day - start_day).days
     daily_averages = []
 
-    for day_count in range(1, 8):
+    for day_count in range(1, day_delta):
 
         daily_readouts = readouts.filter(
             timestamp__gte=start_day,
