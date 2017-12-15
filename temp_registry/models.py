@@ -66,5 +66,5 @@ class AlertEmails(models.Model):
 
 
 class AlertTimeout(models.Model):
-    temp_sensor = models.ForeignKey(TemperatureSensor)
+    temp_sensor = models.ForeignKey(TemperatureSensor, models.CASCADE)
     timeout = models.DateTimeField()
