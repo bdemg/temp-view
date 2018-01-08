@@ -9,6 +9,19 @@ from temp_registry.models import TemperatureReadout
 
 def dailyReport(start_date, mac):
 
+    def calculate_hourly_average(hourly_readouts):
+
+        hourly_total = 0
+        for readout in hourly_readouts:
+            hourly_total = hourly_total + readout.temperature
+
+        if not len(hourly_readouts) == 0:
+
+            return hourly_total / len(hourly_readouts)
+        else:
+
+            return 0
+
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=1),
                                                  temp_sensor=mac
@@ -23,19 +36,16 @@ def dailyReport(start_date, mac):
             timestamp__lte=(start_hour + datetime.timedelta(hours=1))
         )
 
-        hourly_total = 0
-        for readout in hourly_readouts:
-            hourly_total = hourly_total + readout.temperature
-
-        hourly_averages.append(hourly_total/len(hourly_readouts))
+        hourly_average = calculate_hourly_average(hourly_readouts)
+        hourly_averages.append([start_hour.strftime("%H:%M"), hourly_average])
 
         start_hour = start_hour + datetime.timedelta(hours=1)
 
     total = 0
     for average in hourly_averages:
-        total = total + average
+        total = total + average[1]
     report = {
-        "total_average": total/len(hourly_averages),
+        "general_average": total/len(hourly_averages),
         "individual_averages": hourly_averages
     }
     return report
@@ -68,7 +78,7 @@ def weeklyReport(start_date, mac):
     for average in daily_averages:
         total = total + average
     report = {
-        "total_average": total/len(daily_averages),
+        "general_average": total/len(daily_averages),
         "individual_averages": daily_averages
     }
     return report
@@ -106,7 +116,7 @@ def monthlyReport(start_date, mac):
     for average in daily_averages:
         total = total + average
     report = {
-        "total_average": total/len(daily_averages),
+        "general_average": total/len(daily_averages),
         "individual_averages": daily_averages
     }
     return report
@@ -139,7 +149,7 @@ def yearlyReport(start_date, mac):
     for average in monthly_averages:
         total = total + average
     report = {
-        "total_average": total/len(monthly_averages),
+        "general_average": total/len(monthly_averages),
         "individual_averages": monthly_averages
     }
     return report
