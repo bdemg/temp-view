@@ -36,8 +36,8 @@ def daily_report(start_date, mac):
             timestamp__lte=(start_hour + datetime.timedelta(hours=1))
         )
 
-        hourly_average = calculate_hourly_average(hourly_readouts)
-        hourly_averages.append([start_hour.strftime("%H:%M"), hourly_average])
+        hourly_averages.append([start_hour.strftime("%H:%M"),
+                                calculate_hourly_average(hourly_readouts)])
 
         start_hour = start_hour + datetime.timedelta(hours=1)
 
@@ -52,6 +52,20 @@ def daily_report(start_date, mac):
 
 
 def weekly_report(start_date, mac):
+
+    def calculate_daily_average(daily_readouts):
+
+        total = 0
+        for readout in daily_readouts:
+            total = total + readout.temperature
+
+        if not len(daily_readouts) == 0:
+
+            return total / len(daily_readouts)
+        else:
+
+            return 0
+
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=7),
                                                  temp_sensor=mac
@@ -66,17 +80,14 @@ def weekly_report(start_date, mac):
             timestamp__lte=(start_day + datetime.timedelta(days=1))
         )
 
-        total = 0
-        for readout in daily_readouts:
-            total = total + readout.temperature
-
-        daily_averages.append(total/len(daily_readouts))
+        daily_averages.append([start_day.strftime("%d/%m/%y"),
+                               calculate_daily_average(daily_readouts)])
 
         start_day = start_day + datetime.timedelta(days=1)
 
     total = 0
     for average in daily_averages:
-        total = total + average
+        total = total + average[1]
     report = {
         "general_average": total/len(daily_averages),
         "individual_averages": daily_averages

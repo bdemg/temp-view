@@ -28,8 +28,10 @@ function ReportsController($scope, $http) {
         case "year":
           chartTitle = "Promedio de temperaturas por mes del año";
           break;
+
         default:
          chartTitle = "Gráfica de temperaturas";
+         break;
       }
 
       // Create the data table.
@@ -45,7 +47,7 @@ function ReportsController($scope, $http) {
                      hAxis: {
                        direction: 1,
                        slantedText: true,
-                       slantedTextAngle: 45 // here you can even use 180
+                       slantedTextAngle: 45
                     }
     };
 
