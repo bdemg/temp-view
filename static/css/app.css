@@ -31,3 +31,28 @@
   margin-top: 0rem;
   padding-top: 0rem;
 }
+
+#id_start_date {
+    position: relative;
+    color: white;
+}
+
+#id_start_date:before {
+    position: absolute;
+    top: 7px; left: 6px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+}
+
+input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}

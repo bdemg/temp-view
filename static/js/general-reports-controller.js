@@ -2,6 +2,28 @@ angular.module('TempView').controller('GeneralReportsController', ['$scope', '$h
 
 function ReportsController($scope, $http) {
 
+  // Load the Visualization API and the corechart package.
+  google.charts.load('current', {'packages':['corechart'], 'language': 'es'});
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.charts.setOnLoadCallback(hideChart);
+
+  // Callback that creates and populates a data table,
+  // instantiates the pie chart, passes in the data and
+  // draws it.
+  function hideChart() {
+
+    $('#chart_div').hide();
+  }
+
+  $("#id_start_date").on("change", function() {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+        .format( this.getAttribute("data-date-format") )
+    )
+  }).trigger("change");
+
   $scope.tempReadouts = [];
 
   $scope.getTemperatureReadouts = function(){
