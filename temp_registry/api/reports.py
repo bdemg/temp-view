@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from temp_registry.models import TemperatureReadout
 
 
-def dailyReport(start_date, mac):
+def daily_report(start_date, mac):
 
     def calculate_hourly_average(hourly_readouts):
 
@@ -51,7 +51,7 @@ def dailyReport(start_date, mac):
     return report
 
 
-def weeklyReport(start_date, mac):
+def weekly_report(start_date, mac):
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=7),
                                                  temp_sensor=mac
@@ -84,7 +84,7 @@ def weeklyReport(start_date, mac):
     return report
 
 
-def monthlyReport(start_date, mac):
+def monthly_report(start_date, mac):
     ###################
     # NOT FINISHED
     ###################
@@ -122,7 +122,7 @@ def monthlyReport(start_date, mac):
     return report
 
 
-def yearlyReport(start_date, mac):
+def yearly_report(start_date, mac):
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=add_years(start_date, 1),
                                                  temp_sensor=mac

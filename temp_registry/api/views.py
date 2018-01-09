@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View
 
 from temp_registry.alerts import send_overheat_alert, send_freezing_alert
-from temp_registry.api.reports import dailyReport, weeklyReport, monthlyReport, yearlyReport
+from temp_registry.api.reports import daily_report, weekly_report, monthly_report, yearly_report
 from temp_registry.forms import BuildingForm, RoomForm
 from temp_registry.models import TemperatureSensor, TemperatureReadout, Building, Room, AlertTimeout
 from temp_registry.serializers import ExtJsonSerializer
@@ -175,15 +175,15 @@ class GeneralTempReporter(View):
         date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
 
         if range == "day":
-            report = dailyReport(date, mac)
+            report = daily_report(date, mac)
 
         elif range == "week":
-            report = weeklyReport(date, mac)
+            report = weekly_report(date, mac)
 
         elif range == "month":
-            report = monthlyReport(date, mac)
+            report = monthly_report(date, mac)
 
         elif range == "year":
-            report = yearlyReport(date, mac)
+            report = yearly_report(date, mac)
 
         return JsonResponse(report)
