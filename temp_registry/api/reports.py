@@ -8,20 +8,6 @@ from temp_registry.models import TemperatureReadout
 
 
 def daily_report(start_date, mac):
-
-    def calculate_hourly_average(hourly_readouts):
-
-        hourly_total = 0
-        for readout in hourly_readouts:
-            hourly_total = hourly_total + readout.temperature
-
-        if not len(hourly_readouts) == 0:
-
-            return hourly_total / len(hourly_readouts)
-        else:
-
-            return 0
-
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=1),
                                                  temp_sensor=mac
@@ -37,7 +23,7 @@ def daily_report(start_date, mac):
         )
 
         hourly_averages.append([start_hour.strftime("%H:%M"),
-                                calculate_hourly_average(hourly_readouts)])
+                                calculate_temperature_average(hourly_readouts)])
 
         start_hour = start_hour + datetime.timedelta(hours=1)
 
@@ -52,20 +38,6 @@ def daily_report(start_date, mac):
 
 
 def weekly_report(start_date, mac):
-
-    def calculate_daily_average(daily_readouts):
-
-        total = 0
-        for readout in daily_readouts:
-            total = total + readout.temperature
-
-        if not len(daily_readouts) == 0:
-
-            return total / len(daily_readouts)
-        else:
-
-            return 0
-
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=7),
                                                  temp_sensor=mac
@@ -81,7 +53,7 @@ def weekly_report(start_date, mac):
         )
 
         daily_averages.append([start_day.strftime("%d/%m/%y"),
-                               calculate_daily_average(daily_readouts)])
+                               calculate_temperature_average(daily_readouts)])
 
         start_day = start_day + datetime.timedelta(days=1)
 
@@ -138,27 +110,24 @@ def yearly_report(start_date, mac):
                                                  timestamp__lte=add_years(start_date, 1),
                                                  temp_sensor=mac
                                                  )
-    start_month = start_date
+    start_month = start_date.date()
     monthly_averages = []
 
-    for month_count in range(1, 12):
+    for month_count in range(1, 13):
 
         month_readouts = readouts.filter(
             timestamp__gte=start_month,
-            timestamp__lte=(start_month + relativedelta(month=1))
+            timestamp__lte=(start_month + relativedelta(months=+1))
         )
 
-        total = 0
-        for readout in month_readouts:
-            total = total + readout.temperature
+        monthly_averages.append([start_month.strftime("%m/%y"),
+                                 calculate_temperature_average(month_readouts)])
 
-        monthly_averages.append(total/len(month_readouts))
-
-        start_month = start_month + datetime.timedelta(days=1)
+        start_month = start_month + relativedelta(months=+1)
 
     total = 0
     for average in monthly_averages:
-        total = total + average
+        total = total + average[1]
     report = {
         "general_average": total/len(monthly_averages),
         "individual_averages": monthly_averages
@@ -177,3 +146,17 @@ def add_years(d, years):
         return d.replace(year=d.year + years)
     except ValueError:
         return d + (date(d.year + years, 1, 1) - date(d.year, 1, 1))
+
+
+def calculate_temperature_average(readouts):
+
+    total = 0
+    for readout in readouts:
+        total = total + readout.temperature
+
+    if not len(readouts) == 0:
+
+        return total / len(readouts)
+    else:
+
+        return 0
