@@ -26,11 +26,22 @@ function ReportsController($scope, $http) {
 
   $scope.tempReadouts = [];
 
+  function parseFloatReadouts(){
+
+    for (var readout = 0; readout < $scope.tempReadouts.individual_averages.length; readout++) {
+
+      $scope.tempReadouts.individual_averages[readout][1] = parseFloat($scope.tempReadouts.individual_averages[readout][1]);
+    }
+
+    $scope.tempReadouts.general_average = parseFloat($scope.tempReadouts.general_average);
+  }
+
   $scope.getTemperatureReadouts = function(){
 
     $http.get("/general_reports/mac=" + $scope.sensor + "/startDate=" + document.getElementById("id_start_date").value + "/range=" + $scope.range).then(function (response){
 
       $scope.tempReadouts = response.data;
+      parseFloatReadouts();
 
       var chartTitle;
 
