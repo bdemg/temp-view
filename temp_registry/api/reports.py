@@ -87,17 +87,14 @@ def monthly_report(start_date, mac):
             timestamp__lte=(start_day + datetime.timedelta(days=1))
         )
 
-        total = 0
-        for readout in daily_readouts:
-            total = total + readout.temperature
-
-        daily_averages.append(total/len(daily_readouts))
+        daily_averages.append([start_day.strftime("%d/%m/%y"),
+                               calculate_temperature_average(daily_readouts)])
 
         start_day = start_day + datetime.timedelta(days=1)
 
     total = 0
     for average in daily_averages:
-        total = total + average
+        total = total + average[1]
     report = {
         "general_average": total/len(daily_averages),
         "individual_averages": daily_averages
