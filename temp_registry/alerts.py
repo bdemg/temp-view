@@ -5,6 +5,8 @@ from temp_registry.models import AlertEmails
 
 
 def send_overheat_alert(sensor, temperature_reading):
+    """Esta función contruye el mensaje de sobrecalentamiento que se manda cuando la
+    temperatura registrada por un sensor sobrepasa su límite superior"""
 
     mail_subject = 'El sensor de la sala {0} ha reportado temperatura abnormal'.format(sensor.room.name)
 
@@ -22,6 +24,9 @@ def send_overheat_alert(sensor, temperature_reading):
 
 
 def send_freezing_alert(sensor, temperature_reading):
+    """Esta función contruye el mensaje de sobreenfriamiento que se manda cuando la
+    temperatura registrada por un sensor sobrepasa su límite inferior"""
+
     mail_subject = 'El sensor de la sala {0} ha reportado temperatura abnormal'.format(sensor.room.name)
 
     underheat_message = """<p> El sensor con la dirección MAC {0} que se encuentra en el salón {1} del edificio {2} 
@@ -39,14 +44,8 @@ def send_freezing_alert(sensor, temperature_reading):
 
 @shared_task
 def send_email_async(subject, content, to="alertas_sensor@uady.edu.mx", content_type="text/html"):
-    """
-    Envía un email con el contenido que se le designe.
-    :param subject: Título del email.
-    :param content: contenido o body del mensaje.
-    :param content_type: tipo de contenido Ej. "text/plain"
-    :param to: lista de usuarios a los que llegará el email.
-    :return: True o False para confirmar el envío.
-    """
+    """Función que envía un email con el contenido que se le designe."""
+
     try:
         msg = EmailMultiAlternatives(subject=subject, body=content, from_email="sensorbot@uady.edu.mx",
                                      to=[to])

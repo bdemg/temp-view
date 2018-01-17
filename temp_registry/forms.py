@@ -3,6 +3,7 @@ from temp_registry.models import TemperatureSensor, Building, Room
 
 
 class SensorForm(forms.ModelForm):
+    """Clase formulario utilizada para registrar la información de un nuevo sensor"""
     class Meta():
         model = TemperatureSensor
         fields = ['MAC_address', 'upper_temp_limit', 'lower_temp_limit', 'building']
@@ -19,6 +20,7 @@ class SensorForm(forms.ModelForm):
 
 
 class BuildingForm(forms.ModelForm):
+    """Clase formulario utilizada para registrar la información de un edificio"""
     class Meta():
         model = Building
         fields = '__all__'
@@ -28,6 +30,7 @@ class BuildingForm(forms.ModelForm):
 
 
 class RoomForm(forms.ModelForm):
+    """Clase formulario utilizada para registrar la infromación de un cuarto"""
     class Meta():
         model = Room
         fields = "__all__"

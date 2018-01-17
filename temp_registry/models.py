@@ -5,6 +5,7 @@ from django.db import models
 
 
 class TemperatureSensor(models.Model):
+    """Clase modelo para guardar y acceder a la información de los sensores."""
     MAC_address = models.CharField(primary_key=True, max_length=17, validators=[
         RegexValidator(regex=r'^[a-f0-9:]{17}$', message="La dirección mac no tiene un formato válido")])
     building = models.ForeignKey("Building", on_delete=models.SET_NULL, null=True)
@@ -36,6 +37,7 @@ class TemperatureSensor(models.Model):
 
 
 class TemperatureReadout(models.Model):
+    """Clase modelo para guardar y acceder a las lecturas de temperatura de un sensor"""
     temp_sensor = models.ForeignKey(TemperatureSensor, models.CASCADE)
     temperature = models.DecimalField(max_digits=5, decimal_places=3)
     humidity = models.DecimalField(max_digits=5, decimal_places=3)
@@ -43,6 +45,7 @@ class TemperatureReadout(models.Model):
 
 
 class Building(models.Model):
+    """Clase modelo para guardar y acceder a la información de un edificio"""
     name = models.CharField(unique=True, max_length=50)
 
     @property
@@ -54,6 +57,7 @@ class Building(models.Model):
 
 
 class Room(models.Model):
+    """Clase modelo para guardar y acceder a la información de un cuarto"""
     name = models.CharField(max_length=50)
     building = models.ForeignKey(Building, models.CASCADE)
 
@@ -62,9 +66,14 @@ class Room(models.Model):
 
 
 class AlertEmails(models.Model):
+    """Clase modelo para guardar y acceder a los emails a los que se
+    mandan correos de alerta si se ha excedido el límite de temperatura
+    de un sensor"""
     email = models.EmailField(max_length=254, unique=True)
 
 
 class AlertTimeout(models.Model):
+    """Clase modelo para guardar y acceder a los tempoizadores que evitan que
+    las alertas por email se manden por una cantidad de tiempo"""
     temp_sensor = models.ForeignKey(TemperatureSensor, models.CASCADE)
     timeout = models.DateTimeField()
