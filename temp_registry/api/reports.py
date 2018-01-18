@@ -8,6 +8,10 @@ from temp_registry.models import TemperatureReadout
 
 
 def daily_report(start_date, mac):
+    """Esta función se encarga de construir un reporte con las temperaturas de cada hora de un día indicado,
+    basándose en la fecha de inicio y la MAC que recibe. El reporte se construye en un diccionario que
+    contiene un promedio general y un arreglo bidimensional con los promedios por hora"""
+
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=1),
                                                  temp_sensor=mac
@@ -38,6 +42,10 @@ def daily_report(start_date, mac):
 
 
 def weekly_report(start_date, mac):
+    """Esta función se encarga de construir un reporte con las temperaturas de cada dia de una semana indicada,
+        basándose en la fecha de inicio y la MAC que recibe. El reporte se construye en un diccionario que
+        contiene un promedio general y un arreglo bidimensional con los promedios por dia"""
+
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + datetime.timedelta(days=7),
                                                  temp_sensor=mac
@@ -68,9 +76,9 @@ def weekly_report(start_date, mac):
 
 
 def monthly_report(start_date, mac):
-    ###################
-    # NOT FINISHED
-    ###################
+    """Esta función se encarga de construir un reporte con las temperaturas de cada dia de un mes indicado,
+        basándose en la fecha de inicio y la MAC que recibe. El reporte se construye en un diccionario que
+        contiene un promedio general y un arreglo bidimensional con los promedios por dia"""
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=start_date + relativedelta(months=+1),
                                                  temp_sensor=mac
@@ -103,6 +111,9 @@ def monthly_report(start_date, mac):
 
 
 def yearly_report(start_date, mac):
+    """Esta función se encarga de construir un reporte con las temperaturas de cada mes de un año indicado,
+        basándose en la fecha de inicio y la MAC que recibe. El reporte se construye en un diccionario que
+        contiene un promedio general y un arreglo bidimensional con los promedios por mes"""
     readouts = TemperatureReadout.objects.filter(timestamp__gte=start_date,
                                                  timestamp__lte=add_years(start_date, 1),
                                                  temp_sensor=mac
@@ -146,7 +157,7 @@ def add_years(d, years):
 
 
 def calculate_temperature_average(readouts):
-
+    """Esta función se encarga de calcular el promedio en las lecturas de sensor que se le pasan."""
     total = 0
     for readout in readouts:
         total = total + readout.temperature
