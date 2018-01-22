@@ -43,14 +43,21 @@ def send_freezing_alert(sensor, temperature_reading):
 
 
 @shared_task
-def send_email_async(subject, content, to="alertas_sensor@uady.edu.mx", content_type="text/html"):
+def send_email_async(subject, content, to="alertas_sensor@uady.edu.mx", content_type="text/html", retries=5):
     """Función que envía un email con el contenido que se le designe."""
 
     try:
         msg = EmailMultiAlternatives(subject=subject, body=content, from_email="sensorbot@uady.edu.mx",
                                      to=[to])
-        if content_type == "text/html":
-            msg.attach_alternative(content, "text/html")
+
+        msg.attach_alternative(content, content_type)
         msg.send()
+
     except:
-        print("ERROR SENDING EMAILS")
+
+        if retries > 0:
+
+            send_email_async(subject, content, to, content_type, retries-1)
+        else:
+
+            print("Can't send alert email")
